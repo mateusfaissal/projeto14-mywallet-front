@@ -8,7 +8,7 @@ export default function TransactionsPage() {
 
   const { tipo } = useParams();
   const navigate = useNavigate();
-  const [token] = useContext(tokenContext);
+  const [token, setToken] = useContext(tokenContext);
   const [value, setValue] = useState("");
   const [description, setDescription] = useState("");
 

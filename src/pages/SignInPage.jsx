@@ -9,7 +9,7 @@ export default function SignInPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [setToken] = useContext(tokenContext);
+  const [token, setToken] = useContext(tokenContext);
   const navigate = useNavigate();
 
   function handleToken(dbToken) {
