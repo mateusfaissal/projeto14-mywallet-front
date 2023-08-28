@@ -8,7 +8,7 @@ export default function SignInPage() {
       <form>
         <MyWalletLogo />
         <input placeholder="E-mail" type="email" />
-        <input placeholder="Senha" type="password" autocomplete="new-password" />
+        <input placeholder="Senha" type="password" />
         <button>Entrar</button>
       </form>
 
