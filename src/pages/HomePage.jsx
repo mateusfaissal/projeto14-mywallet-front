@@ -1,33 +1,75 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { Link, useNavigate } from "react-router-dom";
+import tokenContext from "../contexts/TokenContext";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 
 export default function HomePage() {
+
+  const [name, setName] = useState("");
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const navigate = useNavigate();
+  const [token, setToken] = useContext(tokenContext);
+  
+  const newToken = token;
+  console.log("token", newToken)
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${newToken}`
+    }
+  }
+
+  useEffect(() => {
+
+    axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
+    .then((res) => {
+      console.log(res.data)
+      setName(res.data.name)
+      setTransactions(res.data.allTransactions.reverse())
+    })
+    .catch((err) => {
+      alert(err)
+      navigate("/")
+    })
+
+  }, []);
+
+
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1>Olá, {name} </h1>
         <BiExit />
       </Header>
 
       <TransactionsContainer>
-        <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
+        {transactions.length === 0 ? (
+          <p> Não há registros de entrada ou saída </p>
+        ) : (
+          <>
+          <ul>
+            {transactions.map((t, i) => (
+              
+              <ListItemContainer key={i}>
+              <div>
+                <span>{t.date}</span>
+                <strong data-test="registry-name">{t.description}</strong>
+              </div>
+              <Value color={"negativo"}>{`R$ ${Number(t.value).toFixed(2).replace('.', ',')}`}</Value>
+            </ListItemContainer>
 
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
-        </ul>
+            ))}
+         
+          </ul>
+
+          </>
+        )}
+        
+          
 
         <article>
           <strong>Saldo</strong>

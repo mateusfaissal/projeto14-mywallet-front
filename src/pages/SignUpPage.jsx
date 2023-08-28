@@ -21,7 +21,7 @@ export default function SignUpPage() {
 
     axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, { name, email, password })
     .then(() => navigate("/"))
-    .catch((err) => console.log(err))
+    .catch((err) => alert(err.message))
 
   }
 
@@ -29,10 +29,10 @@ export default function SignUpPage() {
     <SignUpContainer>
       <form onSubmit={signUp}>
         <MyWalletLogo />
-        <input placeholder="Nome" type="text" value={name} onChange={e => setName(e.target.value)} />
-        <input placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input placeholder="Senha" type="password"  value={password} onChange={e => setPassword(e.target.value)} />
-        <input placeholder="Confirme a senha" type="password" value={confPassword} onChange={e => setConfPassword(e.target.value)} />
+        <input placeholder="Nome" type="text" value={name} onChange={e => setName(e.target.value)} required/>
+        <input placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} required/>
+        <input placeholder="Senha" type="password"  value={password} onChange={e => setPassword(e.target.value)} required/>
+        <input placeholder="Confirme a senha" type="password" value={confPassword} onChange={e => setConfPassword(e.target.value)} required/>
         <button>Cadastrar</button>
       </form>
 
