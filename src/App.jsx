@@ -10,20 +10,20 @@ import tokenContext from "./contexts/TokenContext"
 export default function App() {
 
   const [token, setToken] = useState("");
-  
+
   return (
 
     <tokenContext.Provider value={[token, setToken]}>
-    <PagesContainer>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<SignInPage />} />
-          <Route path="/cadastro" element={<SignUpPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
-        </Routes>
-      </BrowserRouter>
-    </PagesContainer>
+      <PagesContainer>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<SignInPage />} />
+            <Route path="/cadastro" element={<SignUpPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
+          </Routes>
+        </BrowserRouter>
+      </PagesContainer>
     </tokenContext.Provider>
   )
 }

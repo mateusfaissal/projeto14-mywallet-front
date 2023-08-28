@@ -20,8 +20,8 @@ export default function SignUpPage() {
     if (password !== confPassword) return alert("Password must be equal!");
 
     axios.post(`${import.meta.env.VITE_API_URL}/sign-up`, { name, email, password })
-    .then(() => navigate("/"))
-    .catch((err) => alert(err.message))
+      .then(() => navigate("/"))
+      .catch((err) => alert(err.message))
 
   }
 
@@ -29,11 +29,11 @@ export default function SignUpPage() {
     <SignUpContainer>
       <form onSubmit={signUp}>
         <MyWalletLogo />
-        <input placeholder="Nome" type="text" value={name} onChange={e => setName(e.target.value)} required/>
-        <input placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} required/>
-        <input placeholder="Senha" type="password"  value={password} onChange={e => setPassword(e.target.value)} required/>
-        <input placeholder="Confirme a senha" type="password" value={confPassword} onChange={e => setConfPassword(e.target.value)} required/>
-        <button>Cadastrar</button>
+        <input data-test="name" placeholder="Nome" type="text" value={name} onChange={e => setName(e.target.value)} required />
+        <input data-test="email" placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+        <input data-test="password" placeholder="Senha" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        <input data-test="conf-password" placeholder="Confirme a senha" type="password" value={confPassword} onChange={e => setConfPassword(e.target.value)} required />
+        <button data-test="sign-up-submit">Cadastrar</button>
       </form>
 
       <Link to={"/"}>

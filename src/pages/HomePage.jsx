@@ -13,9 +13,9 @@ export default function HomePage() {
   const [balance, setBalance] = useState(0);
   const navigate = useNavigate();
   const [token, setToken] = useContext(tokenContext);
-  
+
   const newToken = token;
-  console.log("token", newToken)
+
 
   const config = {
     headers: {
@@ -26,24 +26,61 @@ export default function HomePage() {
   useEffect(() => {
 
     axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
-    .then((res) => {
-      console.log(res.data)
-      setName(res.data.name)
-      setTransactions(res.data.allTransactions.reverse())
-    })
-    .catch((err) => {
-      alert(err)
-      navigate("/")
-    })
+      .then((res) => {
+        setName(res.data.name)
+        setTransactions(res.data.allTransactions.reverse())
+        calcBalance(res.data.allTransactions)
+      })
+      .catch((err) => {
+        alert(err)
+        navigate("/")
+      })
 
   }, []);
+
+
+
+  function handleSignOut() {
+
+    axios.post(`${import.meta.env.VITE_API_URL}/sign-out`, config)
+      .then(() => {
+        localStorage.removeItem("token");
+        setToken("");
+        navigate("/");
+      })
+      .catch((err) => {
+        if (err.response.status = 401) {
+          localStorage.removeItem("token");
+          navigate("/");
+        }
+      });
+
+  }
+
+  function calcBalance(trans) {
+    let val = 0;
+
+    trans.forEach(t => {
+      if (t.type === "entrada") {
+        val += Number(t.value)
+      } else {
+        val -= Number(t.value);
+      }
+    });
+
+    setBalance(val);
+
+  }
+
+
+
 
 
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, {name} </h1>
-        <BiExit />
+        <h1 data-test="user-name">Olá, {name} </h1>
+        <BiExit data-test="logout" onClick={handleSignOut} />
       </Header>
 
       <TransactionsContainer>
@@ -51,41 +88,53 @@ export default function HomePage() {
           <p> Não há registros de entrada ou saída </p>
         ) : (
           <>
-          <ul>
-            {transactions.map((t, i) => (
-              
-              <ListItemContainer key={i}>
-              <div>
-                <span>{t.date}</span>
-                <strong data-test="registry-name">{t.description}</strong>
-              </div>
-              <Value color={"negativo"}>{`R$ ${Number(t.value).toFixed(2).replace('.', ',')}`}</Value>
-            </ListItemContainer>
+            <ul>
+              {transactions.map((t, i) => (
 
-            ))}
-         
-          </ul>
+                <ListItemContainer key={i}>
+                  <div>
+                    <span>{t.date}</span>
+                    <strong data-test="registry-name">{t.description}</strong>
+                  </div>
+                  <Value data-test="registry-amount" color={t.type === "entrada" ? "green" : "red"}>
+                    {`R$ ${Number(t.value).toFixed(2).replace('.', ',')}`}
+                  </Value>
+                </ListItemContainer>
 
+              ))}
+
+            </ul>
+
+            <article>
+              <strong>Saldo</strong>
+              <Value data-test="total-amount" color={balance >= 0 ? "green" : "red"}>
+                {`R$ ${Number(balance).toFixed(2).replace('.', ',')}`}
+              </Value>
+            </article>
           </>
         )}
-        
-          
 
-        <article>
-          <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
-        </article>
+
+
+
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
-          <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
+
+        <button data-test="new-income">
+          <Link to='/nova-transacao/entrada'>
+            <AiOutlinePlusCircle />
+            <p>Nova <br /> entrada</p>
+          </Link>
         </button>
-        <button>
-          <AiOutlineMinusCircle />
-          <p>Nova <br />saída</p>
+
+
+        <button data-test="new-expense">
+          <Link to='/nova-transacao/saida'>
+            <AiOutlineMinusCircle />
+            <p>Nova <br />saída</p>
+          </Link>
         </button>
       </ButtonsContainer>
 
@@ -147,7 +196,7 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+  color: ${(props) => (props.color === "green" ? " #90ee90" : "red")};
 `
 const ListItemContainer = styled.li`
   display: flex;
