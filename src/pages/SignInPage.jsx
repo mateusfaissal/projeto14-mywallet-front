@@ -28,7 +28,7 @@ export default function SignInPage() {
       .then((res) => {
         handleToken(res.data)
       })
-      .catch((err) => alert(err))
+      .catch((err) => console.log(err))
 
   }
 
