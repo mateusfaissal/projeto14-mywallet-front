@@ -122,19 +122,15 @@ export default function HomePage() {
 
       <ButtonsContainer>
 
-        <button data-test="new-income">
-          <Link to='/nova-transacao/entrada'>
+        <button data-test="new-income" onClick={()=> {navigate('/nova-transacao/entrada')}}>
             <AiOutlinePlusCircle />
             <p>Nova <br /> entrada</p>
-          </Link>
         </button>
 
 
-        <button data-test="new-expense">
-          <Link to='/nova-transacao/saida'>
+        <button data-test="new-expense" onClick={()=> {navigate('/nova-transacao/saida')}}>
             <AiOutlineMinusCircle />
             <p>Nova <br />saída</p>
-          </Link>
         </button>
       </ButtonsContainer>
 
