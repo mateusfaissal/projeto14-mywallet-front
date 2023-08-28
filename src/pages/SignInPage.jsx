@@ -1,25 +1,51 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
+import { useContext, useState } from "react"
+import axios from "axios"
+import tokenContext  from "../contexts/TokenContext"
 
 export default function SignInPage() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [token, setToken] = useContext(tokenContext);
+  const navigate = useNavigate();
+
+
+  function signIn(e) {
+
+    e.preventDefault();
+
+    axios.post(`${import.meta.env.VITE_API_URL}/sign-in`, { email, password })
+      .then(res => {
+        const newToken = res.data;
+        setToken(newToken);
+        localStorage.setItem('token', JSON.stringify(newToken));
+        navigate(`/home`);
+      })
+      .catch((err) => console.log(err))
+
+  }
+
+
   return (
-    <SingInContainer>
-      <form>
+    <SignInContainer>
+      <form onSubmit={signIn}>
         <MyWalletLogo />
-        <input placeholder="E-mail" type="email" />
-        <input placeholder="Senha" type="password" />
-        <button>Entrar</button>
+        <input data-test="email" placeholder="E-mail" type="email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input data-test="password" placeholder="Senha" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        <button data-test="sign-in-submit">Entrar</button>
       </form>
 
-      <Link>
+      <Link to={'/cadastro'}>
         Primeira vez? Cadastre-se!
       </Link>
-    </SingInContainer>
+    </SignInContainer>
   )
 }
 
-const SingInContainer = styled.section`
+const SignInContainer = styled.section`
   height: 100vh;
   display: flex;
   flex-direction: column;

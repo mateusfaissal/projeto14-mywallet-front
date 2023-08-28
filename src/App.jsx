@@ -4,9 +4,16 @@ import HomePage from "./pages/HomePage"
 import SignInPage from "./pages/SignInPage"
 import SignUpPage from "./pages/SignUpPage"
 import TransactionsPage from "./pages/TransactionPage"
+import { useState } from "react"
+import tokenContext from "./contexts/TokenContext"
 
 export default function App() {
+
+  const [token, setToken] = useState("");
+  
   return (
+
+    <tokenContext.Provider value={[token, setToken]}>
     <PagesContainer>
       <BrowserRouter>
         <Routes>
@@ -17,6 +24,7 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </PagesContainer>
+    </tokenContext.Provider>
   )
 }
 
