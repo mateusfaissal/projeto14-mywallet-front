@@ -89,7 +89,7 @@ export default function HomePage() {
         ) : (
           <>
             <ul>
-              {transactions.map((t, i) => (
+              {transactions.slice(0).reverse().map((t, i) => (
 
                 <ListItemContainer key={i}>
                   <div>
